@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> SV Hack- Predictions</title>
+
+    <style>
+    /* Global Styles */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #00ffff, #0f0);
+            color: #ffffff;
+            display: flex;
+            podding:30px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background: #ff00;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 4px 4px 89px rgba(0, 0, 730, 0.5);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px #004630;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 1100px;
+            margin: 20px auto;
+            gap: 30px;
+        }
+
+        /* Results Box */
+        .results-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff00ff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .results-box h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #ff00ff;
+        }
+
+        .result-display p {
+            font-size: 1.40rem;
+            margin: 10px 0;
+        }
+
+        /* History Box */
+        .history-box {
+            background: rgba(255, 233, 255, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 20px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 470, 80, 0.3);
+        }
+
+        .history-box h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #5663cf2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #00000;
+        }
+
+        thead th {
+            background: #243b55;
+            padding: 10px;
+            text-align: left;
+            border-bottom: 2px solid #56ccf2;
+        }
+
+        tbody td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #ff00ff;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 30px;
+            color: #ffffff;
+            font-size: 0.9rem;
+        }
+    
+    
+    </style>
+
+
+</head>
+<body>
+    <header>
+        <h1>👑🔥Sunny Hack🔥👑</h1>
+    </header>
+
+    <main>
+        <!-- Results Section -->
+        <section class="results-box">
+            <h2>Prediction Results</h2>
+            <div class="result-display">
+                <p id="period-number">Period: <span>Loading...</span></p>
+                <p id="result">Result: <span>Loading...</span></p>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="history-box">
+            <h2>Result History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="history-table">
+                    <!-- Results will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>� 2025 Sunny- All Rights Reserved</p>
+    </footer>
+    
+    <script>
+    const periodNumberElem = document.getElementById('period-number').querySelector('span');
+        const resultElem = document.getElementById('result').querySelector('span');
+        const historyTable = document.getElementById('history-table');
+
+        let lastPeriodNumber = null;
+
+        // Predefined Results
+        const results = [
+            "Small", "Small", "Big", "Small",
+            "Big", "Big", "Big", "Small",
+            "Small", "Big", "Big",
+            "Small", "Big", "Small", "Big",
+            "Big", "Big", "Big", "Small","Big", 
+            "Big", "Big","Small","Big","Big"
+        ];
+
+        // Mock function for period number (replace with Java implementation)
+        function calculatePeriodNumber() {
+            const now = new Date();
+            const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+            return `${now.getUTCFullYear()}${String(now.getUTCMonth() + 1).padStart(2, '0')}${String(now.getUTCDate()).padStart(2, '0')}1000${10001 + totalMinutes}`;
+        }
+
+        function getResult(periodNumber) {
+            // Map periodNumber to predefined results using modulo
+            const index = parseInt(periodNumber.slice(-4)) % results.length;
+            return results[index];
+        }
+
+        function updateResults() {
+            const periodNumber = calculatePeriodNumber();
+
+            if (periodNumber !== lastPeriodNumber) {
+                lastPeriodNumber = periodNumber;
+                const result = getResult(periodNumber);
+
+                // Update Result Display
+                periodNumberElem.textContent = periodNumber;
+                resultElem.textContent = result;
+
+                // Add to History
+                const row = document.createElement('tr');
+                const periodCell = document.createElement('td');
+                const resultCell = document.createElement('td');
+                periodCell.textContent = periodNumber;
+                resultCell.textContent = result;
+                resultCell.style.color = result.includes("GREEN") ? '#5674cf2' : '#ff6f61';
+                row.appendChild(periodCell);
+                row.appendChild(resultCell);
+                historyTable.prepend(row);
+            }
+        }
+
+        // Check for period changes every 30 seconds
+        setInterval(updateResults, 30000);
+
+        // Initialize on page load
+        updateResults();
+    
+    
+      </script>
+   </head>
+</hitml>
